@@ -1,0 +1,203 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname AlvoTESTE) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+(require 2htdp/image)
+(require 2htdp/universe)
+;; Jean Carlos Neto Grr 2016 7741
+;; Arildo Mancini Grr 2016 7512
+;; Programa jogo mata a bruxa e seus bichos
+
+;; =================
+;; Constante do CENARIO:
+
+ (define PAREDE (bitmap "paredes.png"))
+ (define LARGURA-CENARIO 1220)
+ (define ALTURA-CENARIO  800)
+ (define CENARIO(empty-scene LARGURA-CENARIO ALTURA-CENARIO)) 
+ (define TELA-GAME-OVER (overlay (text "GAME OVER" 30 "red") CENARIO))
+
+;; Constante dos alvos arma:
+
+ (define ARMA (scale 0.5(bitmap "arma.png"))) 
+ (define ARMA-MURO (overlay/align "middle" "bottom" ARMA PAREDE))
+ (define TELA(overlay/align "middle" "bottom" ARMA-MURO CENARIO)) 
+ (define Y-BB (/ LARGURA-CENARIO 2))
+ (define DX-BB-DEFAULT 5)
+  
+;; Constante dos alvos morcego:
+
+ (define ALVO-MOR (bitmap "morcego.png"))
+ (define IMG-ALVO-MOR-INO (bitmap "morcego.png"))
+ (define IMG-ALVO-MOR-VORTANO (flip-horizontal IMG-ALVO-MOR-INO))
+ (define Y2 (/ ALTURA-CENARIO 2))
+ ;(define MEIO-H-ALVO-MOR (/ (image-width IMG-ALVO-MOR-INO) 2 ))
+ ;(define LIMITE-ESQUERDO (- LARGURA-CENARIO MEIO-H-ALVO-MOR))
+ ;(define LIMITE-DIREITO (- LARGURA-CENARIO MEIO-H-ALVO-MOR))
+
+;; Constante dos alvos bruxa:
+
+ (define ALVO-BRUXA (scale 0.35(bitmap "bruxa.png")))
+ (define IMG-ALVO-BRUXA-INO (bitmap "bruxa.png"))
+ (define IMG-ALVO-BRUXA-VORTANO (flip-horizontal IMG-ALVO-BRUXA-INO))
+ (define Y (/ ALTURA-CENARIO 2))
+ (define MEIO-H-ALVO-BRUXA (/ (image-width IMG-ALVO-BRUXA-INO) 2 ))
+ (define LIMITE-ESQUERDO (- LARGURA-CENARIO MEIO-H-ALVO-BRUXA ))
+ (define LIMITE-DIREITO (- LARGURA-CENARIO MEIO-H-ALVO-BRUXA ))
+ 
+
+;; Constante dos alvos corvo:
+
+ (define ALVO-CORVO (scale 0.50(bitmap "corvo.png")))
+ (define IMG-ALVO-CORVO-INO (bitmap "corvo.png"))
+ (define IMG-ALVO-CORVO-VORTANO (flip-horizontal IMG-ALVO-CORVO-INO))
+ (define Y3 (/ ALTURA-CENARIO 2))
+ 
+ 
+ (define TELA-ALVO(place-image ALVO-BRUXA 100 150(place-image ALVO-CORVO 500 150(place-image ALVO-MOR 890 150 TELA))))
+
+;; =================
+;; Definições de dados:
+
+(define-struct bruxa (x dx))
+;;Vaca é (make-bruxa Natural Inteiro)
+;;interp. representa a bruxa que está numa posição x
+;;da tela e anda a uma velocidade dx (dx também indica a direção
+;;em que ela está apontando)
+
+;exemplos:
+(define ALVO-BRUXA-INICIAL (make-bruxa 0 10))
+(define ALVO-BRUXA-MEIO (make-bruxa (/ LARGURA-CENARIO 2) 10))
+(define ALVO-BRUXA-ANTES-VIRAR (make-bruxa (+ LIMITE-DIREITO 5) 10))
+(define ALVO-BRUXA-VIRADA (make-bruxa LIMITE-DIREITO -10))
+(define ALVO-BRUXA-MEIO-VORTANO (make-bruxa (/ LARGURA-CENARIO 2) -10))
+(define ALVO-BRUXA-CHEGANDO (make-bruxa 50 -10))
+(define ALVO-BRUXA-ULTRAPASSOU (make-bruxa (+ LIMITE-DIREITO 20) 50))
+(define ALVO-BRUXA-NO-LIMITE (make-bruxa LIMITE-DIREITO -50))
+
+
+
+;; distancia : Numero Numero Numero Numero -> Numero
+;; calcula distancia
+; !!!
+(define (distancia x1 y1 x2 y2)
+  (sqrt (+ (sqr (- x2 x1)) (sqr (- y2 y1)))))
+
+(check-expect (distancia 3 0 0 4) 5)
+
+;; proxima-bruxa : Bruxa -> Bruxa
+;; recebe uma bruxa na posicao x e retorna uma bruxa com posição
+;; x atualizada com o dx
+;(define (proxima-bruxa b) b)
+(define (proxima-bruxa b)
+  (cond 
+        [(> (bruxa-x b) LIMITE-DIREITO)
+         (make-bruxa LIMITE-DIREITO (- (bruxa-dx b)))]
+        [(< (bruxa-x b) 0)
+         (make-bruxa 0 (- (bruxa-dx b)))]
+        [else
+         (make-bruxa (+ (bruxa-x b) (bruxa-dx b))
+             (bruxa-dx b))])
+ )
+
+
+; exemplos / testes
+;casos em que ela anda pra direita sem chegar no limite
+(check-expect (proxima-bruxa (make-bruxa 0 10))
+              (make-bruxa 10 10))
+(check-expect (proxima-bruxa ALVO-BRUXA-MEIO)
+              (make-bruxa (+ (/ LARGURA-CENARIO 2) 10)
+                         10))
+; casos em que chega no limite direito e tem que virar
+(check-expect (proxima-bruxa ALVO-BRUXA-ANTES-VIRAR)
+              ALVO-BRUXA-VIRADA)
+(check-expect (proxima-bruxa ALVO-BRUXA-ULTRAPASSOU)
+                            ALVO-BRUXA-NO-LIMITE)
+; caso em que ela anda pra esquerda sem chegar no limite 
+(check-expect (proxima-bruxa ALVO-BRUXA-MEIO-VORTANO)
+                            (make-bruxa (- (/ LARGURA-CENARIO 2) 10)
+                                       -10))
+
+; casos em que chega no limite esquerdo e tem que virar
+(check-expect (proxima-bruxa (make-bruxa -10 -10))
+                            (make-bruxa 0 10))
+(check-expect (proxima-bruxa (make-bruxa -20 -50))
+                            (make-bruxa 0 50))
+
+;; desenha-bruxa: Bruxa -> Image
+;; retorna a representação do cenário com a bruxa
+#;
+(define (fn-para-bruxa b)
+  (... (bruxa-x b) (bruxa-dx b))
+  )
+
+(define (desenha-bruxa b)
+  (place-image
+   (if (< (bruxa-dx b) 0)
+       IMG-ALVO-BRUXA-VORTANO
+       IMG-ALVO-BRUXA-INO)
+   (bruxa-x b)
+   Y
+   CENARIO))      
+
+
+;; =================
+;; Funções:
+
+;; Bruxa -> Bruxa
+;; inicie o mundo com (main-bruxa ALVO-BRUXA-INICIAL)
+;; 
+
+;;
+(define (main-bruxa b)
+  (big-bang b               ; Bruxa   (estado inicial do mundo)
+            (on-tick   proxima-bruxa)     ; bruxa -> bruxa    
+                                 
+            (to-draw   desenha-bruxa)   ; Bruxa -> Image   
+                                          
+           ))    ; Bruxa KeyEvent -> Bruxa
+
+#;
+(define (main estado)
+  (big-bang estado               ; EstadoMundo   (estado inicial do mundo)
+            (on-tick   tock)     ; EstadoMundo -> EstadoMundo    
+                                   ;(retorna um novo estado do mundo dado o atual a cada tick do clock)
+            (to-draw   desenha-mundo)   ; EstadoMundo -> Image   
+                                          ;(retorna uma imagem que representa o estado atual do mundo)
+            (stop-when ...)      ; EstadoMundo -> Boolean    
+                                    ;(retorna true se o programa deve terminar e false se deve continuar)
+            (on-mouse  ...)      ; EstadoMundo Integer Integer MouseEvent -> EstadoMundo    
+                                    ;(retorna um novo estado do mundo dado o estado atual e uma interação com o mouse)
+            (on-key    ...)))    ; EstadoMundo KeyEvent -> EstadoMundo
+                                    ;(retorna um novo estado do mundo dado o estado atual e uma interação com o teclado)
+
+;; EstadoMundo -> EstadoMundo
+;; produz o próximo ...
+;; !!!
+#;
+(define (tock estado) ...)
+
+
+;; EstadoMundo -> Image
+;; desenha 
+;; !!!
+#;
+(define (desenha-mundo estado) ...)
+
+
+;; EstadoMundo KeyEvent -> EstadoMundo
+;; quando teclar ...  produz ...  <apagar caso não precise usar>
+#;
+(define (handle-key estado ke)
+  (cond [(key=? ke " ") (... estado)]
+        [else
+         (... estado)]))
+
+;; EstadoMundo Integer Integer MouseEvent -> EstadoMundo
+;; Quando fazer ... nas posições x y no mouse produz ...   <apagar caso não precise usar>
+#;
+(define (handle-mouse estado x y me)
+(cond [(mouse=? me "button-down") (... estado x y)]
+      [else
+       (... estado x y)]))
+
