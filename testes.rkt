@@ -12,9 +12,9 @@
    "proxima-arma"
    ...))
 ;;Exemplo/Teste
-(check-expect (proxima-arma "esquerda") "meio")
-(check-expect (proxima-arma "meio") "direita")
-(check-expect (proxima-arma "direita") "esquerda")
+(check-equal? (proxima-arma "esquerda") "meio")
+(check-equal? (proxima-arma "meio") "direita")
+(check-equal? (proxima-arma "direita") "esquerda")
 ;;****************************************************************************************************************************   
 ;#
 (define (proximo-morcego m)
@@ -23,25 +23,27 @@
    ...))
 ; exemplos / testes
 ;casos em que ele anda pra direita sem chegar no limite 
-(check-expect (proximo-morcego (make-morcego 0 10))
+
+(check-equal? (proximo-morcego (make-morcego 0 10))
               (make-morcego 10 10)) 
-(check-expect (proximo-morcego ALVO-MOR-MEIO)
+(check-equal? (proximo-morcego ALVO-MOR-MEIO)
               (make-morcego (+ (/ LARGURA-CENARIO 2) 10)
                          10))
 ; casos em que chega no limite direito e tem que virar
-(check-expect (proximo-morcego ALVO-MOR-ANTES-VIRAR)
+(check-equal? (proximo-morcego ALVO-MOR-ANTES-VIRAR)
               ALVO-MOR-VIRADA)
-(check-expect (proximo-morcego ALVO-MOR-ULTRAPASSOU)
+(check-equal? (proximo-morcego ALVO-MOR-ULTRAPASSOU)
                             ALVO-MOR-NO-LIMITE)
 ; caso em que ele anda pra esquerda sem chegar no limite 
-(check-expect (proximo-morcego ALVO-MOR-MEIO-VORTANO)
+(check-equal? (proximo-morcego ALVO-MOR-MEIO-VORTANO)
                             (make-morcego (- (/ LARGURA-CENARIO 2) 10)
                                        -10))
 
 ; casos em que chega no limite esquerdo e tem que virar
-(check-expect (proximo-morcego (make-morcego -10 -10))
+
+(check-equal? (proximo-morcego (make-morcego -10 -10))
                             (make-morcego 0 10))
-(check-expect (proximo-morcego (make-morcego -20 -50))
+(check-equal? (proximo-morcego (make-morcego -20 -50))
                             (make-morcego 0 50))
 
 ;;************************************************************************************************************************
@@ -52,25 +54,26 @@
    ...))
  ;; exemplos / testes
 ;casos em que ela anda pra direita sem chegar no limite
-(check-expect (proxima-bruxa (make-bruxa 0 10))
+(check-equal? (proxima-bruxa (make-bruxa 0 10))
               (make-bruxa 10 10))
-(check-expect (proxima-bruxa ALVO-BRUXA-MEIO)
+(check-equal? (proxima-bruxa ALVO-BRUXA-MEIO)
               (make-bruxa (+ (/ LARGURA-CENARIO 2) 10)
                          10))
 ; casos em que chega no limite direito e tem que virar
-(check-expect (proxima-bruxa ALVO-BRUXA-ANTES-VIRAR)
+
+(check-equal? (proxima-bruxa ALVO-BRUXA-ANTES-VIRAR)
               ALVO-BRUXA-VIRADA)
-(check-expect (proxima-bruxa ALVO-BRUXA-ULTRAPASSOU)
+(check-equal? (proxima-bruxa ALVO-BRUXA-ULTRAPASSOU)
                             ALVO-BRUXA-NO-LIMITE)
 ; caso em que ela anda pra esquerda sem chegar no limite 
-(check-expect (proxima-bruxa ALVO-BRUXA-MEIO-VORTANO)
+(check-equal? (proxima-bruxa ALVO-BRUXA-MEIO-VORTANO)
                             (make-bruxa (- (/ LARGURA-CENARIO 2) 10)
                                        -10))
 
 ; casos em que chega no limite esquerdo e tem que virar
-(check-expect (proxima-bruxa (make-bruxa -10 -10))
+(check-equal? (proxima-bruxa (make-bruxa -10 -10))
                             (make-bruxa 0 10))
-(check-expect (proxima-bruxa (make-bruxa -20 -50))
+(check-equal? (proxima-bruxa (make-bruxa -20 -50))
                             (make-bruxa 0 50))
 ;;******************************************************************************************************************************   
 ;#
@@ -80,27 +83,30 @@
    ...))
    ; exemplos / testes
 ;casos em que ele anda pra direita sem chegar no limite
-(check-expect (proximo-corvo (make-corvo 0 10))
+
+(check-equal? (proximo-corvo (make-corvo 0 10))
               (make-corvo 10 10))
-(check-expect (proximo-corvo ALVO-CORVO-MEIO)
+(check-equal? (proximo-corvo ALVO-CORVO-MEIO)
               (make-corvo (+ (/ LARGURA-CENARIO 2) 10)
                          10))
 ; casos em que chega no limite direito e tem que virar
-(check-expect (proximo-corvo ALVO-CORVO-ANTES-VIRAR)
+
+(check-equal? (proximo-corvo ALVO-CORVO-ANTES-VIRAR)
               ALVO-CORVO-VIRADA)
-(check-expect (proximo-corvo ALVO-CORVO-ULTRAPASSOU)
+(check-equal? (proximo-corvo ALVO-CORVO-ULTRAPASSOU)
                             ALVO-CORVO-NO-LIMITE)
 ; caso em que ele anda pra esquerda sem chegar no limite 
-(check-expect (proximo-corvo ALVO-CORVO-MEIO-VORTANO)
+
+(check-equal? (proximo-corvo ALVO-CORVO-MEIO-VORTANO)
                             (make-corvo (- (/ LARGURA-CENARIO 2) 10)
                                        -10))
 
 ; casos em que chega no limite esquerdo e tem que virar
-(check-expect (proximo-corvo (make-corvo -10 -10))
-                            (make-corvo 0 10))
-(check-expect (proximo-corvo (make-corvo -20 -50))
-                            (make-corvo 0 50))
 
+(check-equal? (proximo-corvo (make-corvo -10 -10))
+                            (make-corvo 0 10))
+(check-equal? (proximo-corvo (make-corvo -20 -50))
+                            (make-corvo 0 50))
 ;;**************************************************************************************************************************
 #;
 (define desenha-arma
@@ -108,16 +114,16 @@
    "desenha-arma"
    ...))
  ;;Exemplo/Teste
-(check-expect (desenha-arma "esquerda") IMG-ARMA-45-ESQ)
-(check-expect (desenha-arma "meio") IMG-ARMA-MEIO)
-(check-expect (desenha-arma "direita") IMG-ARMA-45-DIR)   
+(check-equal? (desenha-arma "esquerda") IMG-ARMA-45-ESQ)
+(check-equal? (desenha-arma "meio") IMG-ARMA-MEIO)
+(check-equal? (desenha-arma "direita") IMG-ARMA-45-DIR)   
 ;;*********************************************************************************************************************
 #;
 (define distancia x1 y1 x2 y2
   (test-suite
    "distancia x1 y1 x2 y2"
    ...))
-(check-expect (distancia 3 0 0 4) 5)
+(check-equal? (distancia 3 0 0 4) 5)
 
 #;
 (define trata-tecla-arma q ke
@@ -125,8 +131,8 @@
    "trata-tecla-arma q ke"
    ...))
 ;exemplos
-(check-expect (trata-tecla-arma IMG-ARMA-45-ESQ " ") "meio")
-(check-expect (trata-tecla-arma ARMA-INICIAL "0") ARMA-INICIAL)
+(check-equal? (trata-tecla-arma IMG-ARMA-45-ESQ " ") "meio")
+(check-equal? (trata-tecla-arma ARMA-INICIAL "0") ARMA-INICIAL)
 ;;**************************************************************************************************************************   
 
 #;
