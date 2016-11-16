@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname AlvoTESTE) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname Alvo) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 
 (require 2htdp/image)
 (require 2htdp/universe)
@@ -12,9 +12,9 @@
 ;; Constante dos alvos arma:
 
  ;(define ARMA (scale 0.5(bitmap "arma.png")))
- (define IMG-ARMA-MEIO (scale 0.5 (bitmap "arma1.png")))
- (define IMG-ARMA-45-ESQ (bitmap "arma.png"))
- (define IMG-ARMA-45-DIR (bitmap "arma2.png"))
+ (define IMG-ARMA-MEIO (scale 0.4 (bitmap "arma1.png")))
+ (define IMG-ARMA-ESQ (scale 0.4 (bitmap "arma.png")))
+ (define IMG-ARMA-DIR (scale 0.4 (bitmap "arma2.png")))
  (define TEMPO-ARMA 2)
  (define ARMA-INICIAL "meio")
   
@@ -22,10 +22,10 @@
 ;; Constante do CENARIO:
 
  (define PAREDE (bitmap "paredes.png"))
- (define LARGURA-CENARIO 1200)
- (define ALTURA-CENARIO  800)
+ (define LARGURA-CENARIO 1200) 
+ (define ALTURA-CENARIO  700)
  (define CENARIO(empty-scene LARGURA-CENARIO ALTURA-CENARIO))
- (define CENARIO-CORRETO (place-image (beside PAREDE PAREDE) 0 (- ALTURA-CENARIO 200) CENARIO))
+ (define CENARIO-CORRETO (place-image (beside PAREDE PAREDE) 0 (- ALTURA-CENARIO 100) CENARIO))
  (define TELA-GAME-OVER (overlay (text "GAME OVER" 30 "red") CENARIO))
 
 ;********************************************************************************************************************************  
@@ -36,11 +36,11 @@
  (define Y2 (/ ALTURA-CENARIO 2))
  (define MEIO-H-ALVO-MOR (/ (image-width IMG-ALVO-MOR-INO) 2 ))
  (define LIMITE-ESQ-MOR (- LARGURA-CENARIO MEIO-H-ALVO-MOR))
- (define LIMITE-DIR-MOR (- LARGURA-CENARIO MEIO-H-ALVO-MOR))
+ (define LIMITE-DIR-MOR (- LARGURA-CENARIO MEIO-H-ALVO-MOR)) 
 
 ;*********************************************************************************************************************************
 ;; Constante dos alvos bruxa:
-
+ 
  (define IMG-ALVO-BRUXA-INO (scale 0.2(bitmap "bruxa.png")))
  (define IMG-ALVO-BRUXA-VORTANO (flip-horizontal IMG-ALVO-BRUXA-INO))
  (define Y (* ALTURA-CENARIO 0.25))
@@ -69,7 +69,7 @@
 ;;em que ela está apontando)
 
 ;exemplos:
-(define ALVO-MOR-INICIAL (make-morcego 0 10))
+(define ALVO-MOR-INICIAL (make-morcego 100 10))
 (define ALVO-MOR-MEIO (make-morcego (/ LARGURA-CENARIO 2) 10))
 (define ALVO-MOR-ANTES-VIRAR (make-morcego (+ LIMITE-DIR-MOR 5) 10))
 (define ALVO-MOR-VIRADA (make-morcego LIMITE-DIR-MOR -10))
@@ -86,7 +86,7 @@
 ;;em que ela está apontando)
 
 ;exemplos:
-(define ALVO-BRUXA-INICIAL (make-bruxa 0 10))
+(define ALVO-BRUXA-INICIAL (make-bruxa 0 15))
 (define ALVO-BRUXA-MEIO (make-bruxa (/ LARGURA-CENARIO 2) 10))
 (define ALVO-BRUXA-ANTES-VIRAR (make-bruxa (+ LIMITE-DIR-BRU 5) 10))
 (define ALVO-BRUXA-VIRADA (make-bruxa LIMITE-DIR-BRU -10))
@@ -104,7 +104,7 @@
 ;;em que ela está apontando)
 
 ;exemplos:
-(define ALVO-CORVO-INICIAL (make-corvo 0 10))
+(define ALVO-CORVO-INICIAL (make-corvo 200 5))
 (define ALVO-CORVO-MEIO (make-corvo (/ LARGURA-CENARIO 2) 10))
 (define ALVO-CORVO-ANTES-VIRAR (make-corvo (+ LIMITE-DIR-COR 5) 10))
 (define ALVO-CORVO-VIRADA (make-corvo LIMITE-DIR-COR -10))
@@ -139,6 +139,17 @@
         ))
 
 
+;;**************************************************************************************************************************
+(define-struct jogo (arma morcego bruxa corvo))
+;; Jogo é (make-jogo Arma Morcego Bruxa Corvo)
+;; interp. representa um jogo que tem arma
+;; e VARIOS alvos
+(define JOGO-INICIO (make-jogo IMG-ARMA-MEIO
+                     ALVO-MOR-INICIAL
+                     ALVO-BRUXA-INICIAL
+                     ALVO-CORVO-INICIAL
+                             ))
+
 ;; ==================================================================================================================
 ;; ListaDeAlvos é um desses:
 ;; - empty       
@@ -161,91 +172,59 @@
                    (fn-for-ld-alvo (rest ld-alvo)))])) ;RECURSÃO EM CAUDA
 
 
-(define-struct jogo (arma alvos game-over?))
-;; Jogo é (make-jogo Arma ListaDeAlvos Boolean)
-;; interp. representa um jogo que tem uma arma
-;; e VARIOS alvos.
 
-(define JOGO-INICIAL (make-jogo ALVO-MOR-INICIAL
-                                (list IMG-ARMA-MEIO)
-                                #false))
-(define JOGO-MEIO (make-jogo ALVO-MOR-ANTES-VIRAR
-                                (list IMG-ARMA-MEIO)
-                                #false))
-(define JOGO-ZICA (make-jogo
-                   (make-morcego (- (/ LARGURA-CENARIO 2)-5) 10)
-                   (list IMG-ARMA-45-ESQ)
-                   #false))
-(define JOGO-ZICA-BRABA (make-jogo
-                   (make-morcego (- (/ LARGURA-CENARIO 2)-5) 10)
-                   (list IMG-ARMA-MEIO)
-                   #true))
-(define JOGO-ACABOU (make-jogo ALVO-MOR-ANTES-VIRAR
-                               (list IMG-ARMA-45-ESQ)  
-                               #true))
-
-;(define JOGO-3-ALVOS (make-jogo ALVO-MOR-INICIAL
-                                     ; (list IMG-ARMA-45-ESQ
-                                         ;;   (make-arma
-                                          ;   (* LARGURA-CENARIO 0.25)
-                                          ;   0
-                                           ;  (/ ALTURA-CENARIO 2)
-                                           ;  DY-ARMA-DEFAULT)
-                                           ; (make-arma
-                                            ; (* LARGURA-CENARIO 0.75)
-                                            ; 0
-                                            ; (* ALTURA-CENARIO 0.25)
-                                           ;  DY-ARMA-DEFAULT))
-                                    ;  #false))
-
-#;
-(define (fn-para-jogo j)
-  (... (jogo-arma j)
-       (jogo-alvos j)
-       (jogo-game-over? j)))
 
 
 ;;==========================================================================================================================
 ;; Funções:
 
+
+
+;;*****************************************************************************************************************************
 ;; Proxima-arma -> Proxima-arma
 ;; retorna a próxima posição da arma
 
 ;(define (proxima-arma pa) pa)
 
 (define (proxima-arma pa)
+  
   (cond [(string=? pa "esquerda") "meio"]
         [(string=? pa "direita") "esquerda"]
         [(string=? pa "meio") "direita"]
         ))
-
+  
 ;;Exemplo/Teste
 (check-expect (proxima-arma "esquerda") "meio")
 (check-expect (proxima-arma "meio") "direita")
 (check-expect (proxima-arma "direita") "esquerda")
 ;;****************************************************************************************************************************
+ 
 
+
+
+;;*******************************************************************************************************************************
 ;; Recebe uma posição-arma --> Imagem
 ;; Interp. a arma recebida e desenha a figura
 
 ;;(define (desenha-arma posicao-arma) IMG-ARMA-MEIO) ;STUB
 
-(define (desenha-arma posicao-arma)
-  (cond [(string=? posicao-arma "esquerda") IMG-ARMA-45-ESQ]
-        [(string=? posicao-arma "direita") IMG-ARMA-45-DIR]
-        [(string=? posicao-arma "meio") IMG-ARMA-MEIO]
+(define (desenha-arma posicao-arma) 
+  (cond [(image? posicao-arma) (place-image IMG-ARMA-ESQ (/ LARGURA-CENARIO 2) (- ALTURA-CENARIO (image-height IMG-ARMA-ESQ))  CENARIO-CORRETO)]
+        [(image? posicao-arma) (place-image IMG-ARMA-DIR  (/ LARGURA-CENARIO 2) (- ALTURA-CENARIO (image-height IMG-ARMA-DIR)) CENARIO-CORRETO)] 
+        [(image? posicao-arma) (place-image IMG-ARMA-MEIO (/ LARGURA-CENARIO 2) (- ALTURA-CENARIO (image-height IMG-ARMA-MEIO)) CENARIO-CORRETO)] 
         ))
 
 ;;Exemplo/Teste
-(check-expect (desenha-arma "esquerda")  IMG-ARMA-45-ESQ)
-(check-expect (desenha-arma "meio") IMG-ARMA-MEIO)
-(check-expect (desenha-arma "direita") IMG-ARMA-45-DIR)
 
 
-;;====================================================================================================================
 
-; INICIO DA PARTE LÓGICA DO JOGO
+;;;PROF. precisava de monitoria para o teste e não consegui.
 
+
+
+
+
+;;***********************************************************************************************************************************
 ;; proximo-morcego : Morcego -> Morcego
 ;; recebe uma morcego na posicao x e retorna uma morcego com posição
 ;; x atualizada com o dx
@@ -253,7 +232,7 @@
 (define (proximo-morcego m)
   (cond 
         [(> (morcego-x m) LIMITE-DIR-MOR)
-         (make-morcego LIMITE-DIR-MOR (- (morcego-dx m)))]
+         (make-morcego LIMITE-DIR-MOR (- (morcego-dx m)))] 
         [(< (morcego-x m) 0)
          (make-morcego 0 (- (morcego-dx m)))]
         [else
@@ -303,7 +282,7 @@
 ; exemplos / testes
 ;casos em que ela anda pra direita sem chegar no limite
 (check-expect (proxima-bruxa (make-bruxa 0 10))
-              (make-bruxa 10 10))
+              (make-bruxa 10 10)) 
 (check-expect (proxima-bruxa ALVO-BRUXA-MEIO)
               (make-bruxa (+ (/ LARGURA-CENARIO 2) 10)
                          10))
@@ -374,6 +353,24 @@
   (sqrt (+ (sqr (- x2 x1)) (sqr (- y2 y1)))))
 
 (check-expect (distancia 3 0 0 4) 5)
+
+;;****************************************************************************************************************************
+;; proximo-jogo : Jogo -> Jogo
+;; atualiza o jogo
+;(define (proximo-jogo j)  j)
+
+(define (proximo-jogo j)
+  (make-jogo (jogo-arma j)
+              (proximo-morcego (jogo-morcego j))   
+              (proxima-bruxa (jogo-bruxa j)) 
+              (proximo-corvo (jogo-corvo j))))
+
+;;Exemplo/Teste
+
+;;;PROF. precisava de monitoria para o teste e não consegui.
+
+
+
 ;;******************************************************************************************************************************
 
 ;; Desenha-morcego: Morcego -> Image
@@ -385,8 +382,8 @@
        IMG-ALVO-MOR-VORTANO
        IMG-ALVO-MOR-INO)
    (morcego-x m)
-   Y
-   CENARIO-CORRETO)
+   100
+   (rectangle LARGURA-CENARIO ALTURA-CENARIO "outline" "black"))
   )
 ;;******************************************************************************************************************************
 ;; Desenha-bruxa: Bruxa -> Image
@@ -398,8 +395,8 @@
        IMG-ALVO-BRUXA-VORTANO
        IMG-ALVO-BRUXA-INO)
    (bruxa-x b)
-   Y
-   CENARIO-CORRETO)
+   300
+   (rectangle LARGURA-CENARIO ALTURA-CENARIO "outline" "black"))
   )
 ;;*********************************************************************************************************************************
 ;; Desenha-corvo: Corvo -> Image
@@ -412,90 +409,41 @@
        IMG-ALVO-COR-INO)
    (corvo-x c)
    Y 
-   CENARIO-CORRETO)
+     (rectangle LARGURA-CENARIO ALTURA-CENARIO "outline" "black"))
   )
 
-;;*****************************************************************************************************************************
-;; Morcego -> Morcego
-;; inicie o mundo com (main-morcego ALVO-MOR-INICIAL)
-(define (main-morcego m)
-           (big-bang m                ; Morcego   (estado inicial do mundo)
-           (on-tick   proximo-morcego) ; Morcego -> Morcego
-                                       ;retorna a proxima morcego
-                                 
-            (to-draw   desenha-morcego) ; Morcego -> Image   
-                                          ;retorna a imagem da morcego 
-           ))
-
-;;*********************************************************************************************************************
-
-;; Bruxa -> Bruxa
-;; inicie o mundo com (main-bruxa ALVO-BRUXA-INICIAL)
-(define (main-bruxa b)
-           (big-bang b               ; Bruxa   (estado inicial do mundo)
-           (on-tick   proxima-bruxa) ; bruxa -> bruxa
-                                     ; retorna a proxima bruxa
-                                 
-            (to-draw   desenha-bruxa) ; Bruxa -> Image   
-                                          ;retorna a imagem da bruxa
-           ))
-;;*********************************************************************************************************************
-
-;; Corvo -> Corvo
-;; inicie o mundo com (main-corvo ALVO-CORVO-INICIAL)
-(define (main-corvo c)
-           (big-bang c               ; CORVO-INICIAL (estado inicial)
-           (on-tick   proximo-corvo) ; corvo -> corvo
-                                     ; retorna a proximo corvo
-                                 
-            (to-draw   desenha-corvo) ; Corvo -> Image   
-                                          ;retorna a imagem da corvo
-           ))
 ;;************************************************************************************************************************************
-;; Proxima-arma -> Proxima-arma
-;; inicie o mundo com ...
+;; Desenha-jogo: AlvosArma -> Image
+;; retorna a representação do cenário com a arma e os alvos
 
+(define (desenha-jogo j)
+  (overlay
+   (desenha-corvo (jogo-corvo j))
+   (desenha-morcego (jogo-morcego j))
+   (desenha-bruxa (jogo-bruxa j))
+   (desenha-arma (jogo-arma j))    
+   ))
+
+;;****************************************************************************************************************************************************
+;; Jogo -> Jogo
+;; inicie o mundo com jogo-inicio
 (define main
-  (big-bang ARMA-INICIAL                         ; POSIÇÃO-INICIAL   (estado inicial)
-            (on-tick   proxima-arma TEMPO-ARMA)  ; proxima-arma -> proxima-arma    
-                                                 ;(retorna um novo estado do mundo dado o atual a cada tick do clock)
-            (to-draw   desenha-arma)))           ; Proxima-arma -> Image   
-                                                 ;(retorna uma imagem que representa o estado atual do mundo)
-;;======================================================================================================================================
+  (big-bang JOGO-INICIO   
+            (on-tick proximo-jogo)
+            (to-draw desenha-jogo)
+         ))
+;;*****************************************************************************************************************************
+;; Proxima-arma KeyEvent -> Proxima-arma
+;; quando teclar muda a posição da arma na tela
 
-;; EstadoMundo -> Image
-;; desenha 
-;; !!!
-#;
-(define (desenha-mundo estado) ...)
+ (define (trata-tecla ARMA ke) ARMA)  ;;stub
 
+(define (trata-tecla-arma q ke)
+  (cond [(key=? ke " ") "meio"]
+       [else q]))
 
-;; EstadoMundo KeyEvent -> EstadoMundo
-;; quando teclar ...  produz ...  <apagar caso não precise usar>
-#;
-(define (handle-key estado ke)
-  (cond [(key=? ke " ") (... estado)]
-        [else
-         (... estado)]))
-
-;; EstadoMundo Integer Integer MouseEvent -> EstadoMundo
-;; Quando fazer ... nas posições x y no mouse produz ...   <apagar caso não precise usar>
-#;
-(define (handle-mouse estado x y me)
-(cond [(mouse=? me "button-down") (... estado x y)]
-      [else
-       (... estado x y)]))
-#;
-(define (main estado)
-  (big-bang estado               ; EstadoMundo   (estado inicial do mundo)
-            (on-tick   tock)     ; EstadoMundo -> EstadoMundo    
-                                   ;(retorna um novo estado do mundo dado o atual a cada tick do clock)
-            (to-draw   desenha-mundo)   ; EstadoMundo -> Image   
-                                          ;(retorna uma imagem que representa o estado atual do mundo)
-            (stop-when ...)      ; EstadoMundo -> Boolean    
-                                    ;(retorna true se o programa deve terminar e false se deve continuar)
-            (on-mouse  ...)      ; EstadoMundo Integer Integer MouseEvent -> EstadoMundo    
-                                    ;(retorna um novo estado do mundo dado o estado atual e uma interação com o mouse)
-            (on-key    ...)))    ; EstadoMundo KeyEvent -> EstadoMundo
-                                    ;(retorna um novo estado do mundo dado o estado atual e uma interação com o teclado)
+;;exemplos
+(check-expect (trata-tecla-arma IMG-ARMA-ESQ " ") "meio")
+(check-expect (trata-tecla-arma ARMA-INICIAL "0") ARMA-INICIAL)
+;;************************************************************************************************************************************************
 
