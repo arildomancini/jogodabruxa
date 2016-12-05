@@ -60,75 +60,71 @@
 (check-equal? (proximo-morcego ALVO-MOR-MEIO-VORTANO)
                             (make-morcego (- (/ LARGURA-CENARIO 2) 10)
                                        -10))
+;;*******************************************************************************************************************************
+;#
+(define (proximo-bruxa b)
+  (test-suite
+   "proximo-bruxa"
+   ...))
+;;*******************************************************************************************************************************
+;#
+(define (proximo-fada f)
+  (test-suite
+   "proximo-fada"
+   ...))
 ; casos em que chega no limite esquerdo e tem que virar
+
 (check-equal? (proximo-morcego (make-morcego -10 -10))
                             (make-morcego 0 10))
 (check-equal? (proximo-morcego (make-morcego -20 -50))
                             (make-morcego 0 50))
-;;*******************************************************************************************************************************
+; exemplos / testes
+;casos em que ele anda pra direita sem chegar no limite
+(check-expect (proxima-fada (make-fada 0 10 Y-PADRAO))
+              (make-fada 10 10 Y-PADRAO)) 
+(check-expect (proxima-fada FADA-MEIO)
+              (make-fada (+ (/ LARGURA-CENARIO 2) 10)
+                         10 Y-PADRAO))
+; casos em que chega no limite direito e tem que virar
+(check-expect (proxima-fada FADA-ANTES-VIRAR)
+              FADA-VIRADA)
+(check-expect (proxima-fada FADA-ULTRAPASSOU)
+                            FADA-NO-LIMITE)
+; caso em que ele anda pra esquerda sem chegar no limite 
+(check-expect (proxima-fada FADA-MEIO-VOLTANDO)
+                            (make-fada (- (/ LARGURA-CENARIO 2) 10)
+                                       -10 Y-PADRAO))
+
+; casos em que chega no limite esquerdo e tem que virar
+(check-expect (proxima-fada (make-fada -10 -10 Y-PADRAO))
+                            (make-fada 0 10 Y-PADRAO))
+(check-expect (proxima-fada (make-fada -20 -50 Y-PADRAO))
+                            (make-fada 0 50 Y-PADRAO))
+
+;;**************************************************************************************************************************
+;#
+(define (proximos-morcegos ldm)
+  (test-suite
+   "proximos-morcegos"
+   ...))
+ ;; exemplos / testes
+(check-equal? (proximos-morcegos LDMM-3) (list (make-morcego 610 10 200) (make-morcego 610 10 200)))
+;;******************************************************************************************************************************
 ;#
 (define (proxima-bruxa b)
   (test-suite
    "proxima-bruxa"
    ...))
+ ;; exemplos / testes
+(check-equal? (proxima-bruxa BRUXA-INICIAL) (make-bruxa 600 0 55.5 5))
+;;******************************************************************************************************************************
+(define (proximas-bruxas ldb)
+  (test-suite
+   "proximas-bruxas"
+   ...))
+; exemplos / testes
+(check-equal? (proximas-bruxas LDB1) empty)
 ;;*******************************************************************************************************************************
-;#
-(define (proximo-corvo c)
-  (test-suite
-   "proximo-corvo"
-   ...))
-; exemplos / testes
-;casos em que ele anda pra direita sem chegar no limite
-(check-equal? (proximo-corvo (make-corvo 0 10 Y-PADRAO))
-              (make-corvo 10 10 Y-PADRAO)) 
-(check-equal? (proximo-corvo CORVO-MEIO)
-              (make-corvo (+ (/ LARGURA-CENARIO 2) 10)
-                         10 Y-PADRAO))
-; casos em que chega no limite direito e tem que virar
-(check-equal? (proximo-corvo CORVO-ANTES-VIRAR)
-              CORVO-VIRADO)
-(check-equal? (proximo-corvo CORVO-ULTRAPASSOU)
-                            CORVO-NO-LIMITE)
-; caso em que ele anda pra esquerda sem chegar no limite 
-(check-equal? (proximo-corvo CORVO-MEIO-VOLTANDO)
-                            (make-corvo (- (/ LARGURA-CENARIO 2) 10)
-                                       -10 Y-PADRAO))
-
-; casos em que chega no limite esquerdo e tem que virar
-(check-equal? (proximo-corvo (make-corvo -10 -10 Y-PADRAO))
-                            (make-corvo 0 10 Y-PADRAO))
-(check-equal? (proximo-corvo (make-corvo -20 -50 Y-PADRAO))
-                            (make-corvo 0 50 Y-PADRAO))
- 
-;;***********************************************************************************************************************************
-;#
-(define (proxima-fada f)
-  (test-suite
-   "proximo-fada"
-   ...))
-; exemplos / testes
-;casos em que ele anda pra direita sem chegar no limite
-(check-equal? (proxima-fada (make-fada 0 10 Y-PADRAO))
-              (make-fada 10 10 Y-PADRAO)) 
-(check-equal? (proxima-fada FADA-MEIO)
-              (make-fada (+ (/ LARGURA-CENARIO 2) 10)
-                         10 Y-PADRAO))
-; casos em que chega no limite direito e tem que virar
-(check-equal? (proxima-fada FADA-ANTES-VIRAR)
-              FADA-VIRADA)
-(check-equal? (proxima-fada FADA-ULTRAPASSOU)
-                            FADA-NO-LIMITE)
-; caso em que ele anda pra esquerda sem chegar no limite 
-(check-equal? (proxima-fada FADA-MEIO-VOLTANDO)
-                            (make-fada (- (/ LARGURA-CENARIO 2) 10)
-                                       -10 Y-PADRAO))
-
-; casos em que chega no limite esquerdo e tem que virar
-(check-equal? (proxima-fada (make-fada -10 -10 Y-PADRAO))
-                            (make-fada 0 10 Y-PADRAO))
-(check-equal? (proxima-fada (make-fada -20 -50 Y-PADRAO))
-                            (make-fada 0 50 Y-PADRAO))
-;;********************************************************************************************************************************
 ;#
 (define (proximo-tiro t)
   (test-suite
@@ -139,42 +135,6 @@
 (check-equal? (proximo-tiro (make-tiro 10 30 80 0)) (make-tiro 10 30 60 0))
 (check-equal? (proximo-tiro (make-tiro 15 30 50 0)) (make-tiro 15 30 30 0))
 (check-equal? (proximo-tiro TIRO-PADRAO) (make-tiro 600 30 180 0))
-
-;;**************************************************************************************************************************
-;#
-(define (proximo-jogo j)
-  (test-suite
-   "proximo-jogo"
-   ...))
-;;****************************************************************************************************************************
-;#
-(define (proximos-morcegos ldm)
-  (test-suite
-   "proximos-morcegos"
-   ...))
- ;; exemplos / testes
-(check-equal? (proximos-morcegos LDMM-3) (list (make-morcego 610 10 200) (make-morcego 610 10 200)))
-;;******************************************************************************************************************************
-;#
-(define (proximas-bruxas b)
-  (test-suite
-   "proximas-bruxas"
-   ...))
- ;; exemplos / testes
-(check-equal? (proximas-bruxas LDB1) empty)
-;;******************************************************************************************************************************
-(define (proximos-corvos ldc)
-  (test-suite
-   "proximas-corvos"
-   ...))
-; exemplos / testes
-;;******************************************************************************************************************************
-(define (proximas-fadas ldf)
-  (test-suite
-   "proximas-fadas"
-   ...))
-; exemplos / testes
-
 ;;******************************************************************************************************************************
 ;#
 (define (proximos-tiros ldt)
@@ -189,8 +149,24 @@
   (test-suite
    "desenha-arma"
    ...))
-   
+ ;;Exemplo/Teste
+(check-equal? (desenha-arma "esquerda") IMG-ARMA-ESQ)
+(check-equal? (desenha-arma "meio") IMG-ARMA-MEIO)
+(check-equal? (desenha-arma "direita") IMG-ARMA-45-DIR)   
 ;;****************************************************************************************************************************
+;#
+(define (proximo-jogo j)
+  (test-suite
+   "proximo-jogo"
+   ...))
+ ;; exemplos / testes
+(check-equal? (proximo-jogo JOGO-INICIAL) (make-jogo (make-arma 109 10 350 0 20)
+                                                     (list (make-bruxa 600 0 50 5))
+                                                     (list (make-morcego 610 10 200) (make-morcego 610 10 200))
+                                                     #false
+                                                     2
+                                                     empty))
+;;*******************************************************************************************************************************
 #;
 (define (trata-tecla j ke)
   (test-suite
@@ -198,7 +174,7 @@
    ...))
  ;;Exemplo/Teste
  (check-equal? (trata-tecla JOGO-ALVOS-MOVEL "\r")
-              JOGO-INICIAL-SURGINDO)
+              JOGO-INICIAL-SPAWNING)
  ;;********************************************************************************************************************************
 #;
 (define distancia x1 y1 x2 y2
@@ -206,13 +182,15 @@
    "distancia x1 y1 x2 y2"
    ...))
 (check-equal? (distancia 3 0 0 4) 5)
-;;*********************************************************************************************************************************
+
 #;
 (define trata-tecla-arma q ke
   (test-suite
    "trata-tecla-arma q ke"
    ...))
 ;exemplos
+(check-equal? (trata-tecla-arma IMG-ARMA-ESQ " ") "meio")
+(check-equal? (trata-tecla-arma ARMA-INICIAL "0") ARMA-INICIAL)
 ;;**************************************************************************************************************************   
 
 #;

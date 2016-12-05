@@ -40,6 +40,8 @@
         #false
         (first busca)))) 
 
+(check-expect (colisao-tiros-bruxas? LDT1 LDB1) #false)
+
 ;;***********************************************************************************************************************************
 ;; colisao-tiros-morcegos? : ListaDeTiro ListaDeMorcegos -> (pair Tiro Morcego) | false
 ;; verifica se tiros acertaram morcegos
@@ -225,24 +227,28 @@
 ;; proximas-bruxas : ListaDeBruxa -> ListaDeBruxa
 ;; proximas bruxas
 ;; (define (proximas-bruxas ldb) ldb)
+
  (define (proximas-bruxas ldb) 
   (map proxima-bruxa ldb))
 ;;***********************************************************************************************************************************
 ;; proximos-morcegos : ListaDeMorcegos -> ListaDeMorcegos
 ;; proximos morcegos
 ;;(define (proximos-morcegos ldm) ldm)
+
  (define (proximos-morcegos ldm) 
   (map proximo-morcego ldm))
 ;***********************************************************************************************************************************
 ;; proximos-corvos : ListaDeCorvos -> ListaDeCorvos
 ;; proximos-corvos
 ;;(define (proximos-corvos ldc) ldc)
+
  (define (proximos-corvos ldc) 
   (map proximo-corvo ldc))
 ;;***********************************************************************************************************************************
 ;; proximas-fadas : ListaDeFadas -> ListaDeFadas
 ;; proximas-fadas
 ;;(define (proximas-fadas ldf) ldf)
+
  (define (proximas-fadas ldf) 
   (map proxima-fada ldf))
 ;;***********************************************************************************************************************************
@@ -317,7 +323,8 @@
                    (cond [(list? acertou-fada?)
                           #true
                           ]
-                     [else (jogo-game-over? j)])                         
+                     [else (jogo-game-over? j)])
+                         
                    
                    (remainder (+ (jogo-tsurgi j) 1) 40)  
                    (if (list? acertou-bruxa?) 
@@ -327,17 +334,20 @@
   )) 
 ;;**************************************************************************************************************************
 ;; surgi-bruxa : ListaDeBruxa -> ListaDeBruxa
-;; cria novo bruxa no local especificado  
+;; cria novo bruxa no local especificado
+  
  (define (surgi-bruxa ldb)
   (cons (make-bruxa X-SURGIR (random 50) (random 250) (random 100)) ldb))
 ;;**************************************************************************************************************************
 ;; surgi-morcego : ListaDeMorcegos -> ListaDeMorcegos
 ;; cria novo morcego no local especificado
+
  (define (surgi-morcego ldm)
   (cons (make-morcego X-SURGIR (random 30) (random 40)) ldm))
 ;;*****************************************************************************************************************************
 ;; surgi-corvo : ListaDeCorvos -> ListaDeCorvos
 ;; cria novo corvo no local especificado
+
  (define (surgi-corvo ldc)
   (cons (make-corvo X-SURGIR (random 50) (random 400)) ldc))
 ;;*****************************************************************************************************************************
@@ -346,9 +356,13 @@
 
  (define (surgi-fada ldf)
   (cons (make-fada X-SURGIR (random 10) (random 300)) ldf))
+;;==============================================================================================================================            
 ;; FIM DA PARTE LÓGICA
-;;==============================================================================================================================          
+
+
 ;; INICIO DA PARTE VISUAL
+
+
 ;; desenha-jogo : Jogo -> Image 
 ;; desenha o jogo
 
@@ -394,8 +408,7 @@
 ;; desenha-bruxas : ListaDeBruxa -> Image
 ;; desenha bruxas
  (define (desenha-bruxas ldb)
-  (foldl overlay CENARIO (map desenha-bruxa ldb)))
-
+  (foldl overlay CENARIO (map desenha-bruxa ldb))) 
 ;;*********************************************************************************************************************************
 ;; Desenha-corvo: Corvo -> Image
 ;; retorna a representação do cenário com a corvo
@@ -463,6 +476,7 @@
 ;; FIM DA PARTE VISUAL
 ;;=============================================================================================================================
 ;; INICIO DA LOGICA DE INTERAÇÃO
+
 ;; trata-tecla : Jogo KeyEvent -> Jogo
 ;; trata tecla usando trata-tecla-arma
 ;!!!
@@ -495,7 +509,7 @@
            (jogo-tsurgi j)
            (jogo-tiros j)
            )]))
-;;**************************************************************************************************************************
+
 ;; trata-tecla-arma: arma KeyEvent -> arma
 ;; quando tecla espaço é pressionada, arma deve inverter direção (dx)
 ;;(define (trata-tecla-arma v ke) v)
@@ -532,7 +546,7 @@
                    x (inverte-y y))))
 
 (require racket/math)  ;para poder usar funcoes trigonometricas
-;;**********************************************************************************************************************************
+
 ;; Numero Numero Numero Numero -> Numero
 ; Calcula angulo entre 2 pontos
 (define (calcula-angulo x1 y1 x2 y2)
@@ -540,7 +554,7 @@
 
 (define (inverte-y y)
   (- ALTURA-CENARIO y))  ;INVERTER Y PARA OS CALCULOS FICAREM DE ACORDO COM O PRIMEIRO QUADRANTE DO PLANO CARTESIANO
-;;*********************************************************************************************************************************  
+  
 ;; Jogo -> Jogo
 ;; inicie o mundo com (main JOGO-INICIAL-SURGINDO)    
 (define (main j) 

@@ -14,76 +14,63 @@
 
 ;; Constante do cenario:
 (define LARGURA-CENARIO 1200)
-(define ALTURA-CENARIO 700)
-(define PAREDE (bitmap "paredes.png" ))
-(define FUNDO (scale 5 (bitmap "Fundo.jpg" )))
-(define CENARIO (rectangle LARGURA-CENARIO ALTURA-CENARIO "outline" "black"))
-(define TELA-JOGO (place-image (beside PAREDE PAREDE) 0 ALTURA-CENARIO (rectangle LARGURA-CENARIO ALTURA-CENARIO "outline" "black")))
-(define GAME-OVER (scale 2(bitmap "Acabou.png")))
+(define ALTURA 700)
+(define PAREDE (bitmap "paredes.png"))
+(define CENARIO (rectangle LARGURA-CENARIO ALTURA "outline" "black"))
+(define TELA-JOGO (place-image (beside PAREDE PAREDE) 0 ALTURA (rectangle LARGURA-CENARIO ALTURA "outline" "black")))
 
 ;;****************************************************************************************************************************
-;; Constante do tiro 
+;; Constante do tiro
 
 (define IMG-TIRO (ellipse 10 5 "solid" "black"))
-(define Y (/ ALTURA-CENARIO 2))
-(define MEIO-H-TIRO (/ (image-width IMG-TIRO) 2 )) 
+(define Y (/ ALTURA 2))
+(define MEIO-H-TIRO (/ (image-width IMG-TIRO) 2 ))
 (define D-TIRO 30)
 
 ;;******************************************************************************************************************************
 ;; Constante da bruxa:
 
 (define IMG-BRUXA-INO (flip-horizontal(scale 0.1 (bitmap "bruxa.png"))))
-(define IMG-BRUXA-VOLTANDO (flip-horizontal IMG-BRUXA-INO))
+(define IMG-BRUXA-VORTANO (flip-horizontal IMG-BRUXA-INO))
 (define X-B (/ LARGURA-CENARIO 2))
 (define DY-B-DEFAULT 5)
 
 ;********************************************************************************************************************************  
 ;; Constante do morcego:
 
- (define IMG-MOR-INO (scale 0.3(bitmap "morcego.png")))
- (define IMG-MOR-VOLTANDO (flip-horizontal IMG-MOR-INO))
- (define Y2 (/ ALTURA-CENARIO 2))
+ (define IMG-ALVO-MOR-INO (scale 0.3(bitmap "morcego.png")))
+ (define IMG-ALVO-MOR-VORTANO (flip-horizontal IMG-ALVO-MOR-INO))
+ (define Y2 (/ ALTURA 2))
  (define Y-PADRAO 200)
- (define MEIO-H-MOR (/ (image-width IMG-MOR-INO) 2 ))
+ (define MEIO-H-MOR (/ (image-width IMG-ALVO-MOR-INO) 2 ))
  (define LIMITE-ESQ-MOR (- LARGURA-CENARIO MEIO-H-MOR))
  (define LIMITE-DIR-MOR (- LARGURA-CENARIO MEIO-H-MOR))
 
 ;***********************************************************************************************************************************
 ;;; Constante do corvo:
 
- (define IMG-COR-INO (scale 0.2 (bitmap "corvo.png")))
- (define IMG-CORVO-VOLTANDO (flip-horizontal IMG-COR-INO))
- (define Y3 (/ ALTURA-CENARIO 2))
- (define MEIO-H-COR (/ (image-width IMG-COR-INO) 2 ))
- (define LIMITE-ESQ-COR (- LARGURA-CENARIO MEIO-H-COR))
- (define LIMITE-DIR-COR (- LARGURA-CENARIO MEIO-H-COR)) 
-
-;;*****************************************************************************************************************************
-;;; Constante da Fada:
-
- (define IMG-FAD-INO (scale 0.2 (bitmap "fada.png")))
- (define IMG-FAD-VOLTANDO (flip-horizontal IMG-FAD-INO))
- (define Y4 (/ ALTURA-CENARIO 2))
- (define MEIO-H-FAD (/ (image-width IMG-FAD-INO) 2 ))
- (define LIMITE-ESQ-FAD (- LARGURA-CENARIO MEIO-H-FAD))
- (define LIMITE-DIR-FAD (- LARGURA-CENARIO MEIO-H-FAD)) 
+ (define IMG-ALVO-COR-INO (scale 0.2 (bitmap "corvo.png")))
+ (define IMG-ALVO-CORVO-VORTANO (flip-horizontal IMG-ALVO-COR-INO))
+ (define Y3 (/ ALTURA 2))
+ (define MEIO-H-ALVO-COR (/ (image-width IMG-ALVO-COR-INO) 2 ))
+ (define LIMITE-ESQ-COR (- LARGURA-CENARIO MEIO-H-ALVO-COR))
+ (define LIMITE-DIR-COR (- LARGURA-CENARIO MEIO-H-ALVO-COR)) 
 
 ;;*****************************************************************************************************************************
 ;; constante da arma
 (define IMG-ARMA-INO (scale 0.2 (bitmap "arma1.png"))) 
-(define IMG-ARMA-VOLTANDO (flip-horizontal IMG-ARMA-INO))
+(define IMG-ARMA-VORTANO (flip-horizontal IMG-ARMA-INO))
 (define MEIO-H-ARMA (/ (image-width IMG-ARMA-INO) 2 ))
 (define MEIO-A-ARMA (/ (image-height IMG-ARMA-INO) 2 ))
-(define MEIO-H-B (/ (image-width IMG-ARMA-INO) 2 ))
-(define LIMITE-DIREITO (- LARGURA-CENARIO MEIO-H-ARMA))
-(define LIMITE-BAIXO (- ALTURA-CENARIO MEIO-A-ARMA)) 
+(define MEIO-H-B (/ (image-width IMG-BRUXA-INO) 2 ))
+(define LIMITE-DIREITO (- LARGURA-CENARIO MEIO-H-ARMA)) 
 (define LIMITE-ESQUERDO MEIO-H-ARMA)
+(define LIMITE-BAIXO (- ALTURA MEIO-A-ARMA)) 
+(define LIMITE-CIMA MEIO-A-ARMA)
 (define D-ARMA-DEFAULT 10)
 ;;*****************************************************************************************************************************
-
-(define X-SURGIR  LIMITE-DIREITO)
-(define Y-SURGIR (* ALTURA-CENARIO 0.25))  
-(define T-SURGIR (* 20 2)) 
-
+(define X-SPAWN LIMITE-DIREITO)
+(define Y-SPAWN (* ALTURA 0.25))  
+(define T-SPAWN (* 20 2)) 
 
 ;;================================================================================================================================
