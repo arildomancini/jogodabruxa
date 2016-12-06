@@ -4,11 +4,11 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 (require "constantes.rkt") ;importa as constantes definidas no arquivo "constantes.rkt"
-
+(provide (all-defined-out))
 ;;DEFINIÇÕES DE DADOS
 ;;DEFINIÇÕES DE DADOS
 
-(define-struct morcego (x dx y))
+(define-struct morcego (x dx y) #:transparent)
 ;;Morcego é (make-morcego Natural Inteiro)
 ;;interp. representa a morcego que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
@@ -25,7 +25,7 @@
 (define MOR-NO-LIMITE (make-morcego LIMITE-DIR-MOR -50 Y-PADRAO))
 ;;***********************************************************************************************************************************
                             
-(define-struct bruxa (x dx y dy))
+(define-struct bruxa (x dx y dy) #:transparent)
 ;; Bruxa é (make-bruxa Natural Natural Inteiro)
 ;; interp. representa o bruxa que está numa posição y
 ;; da tela e anda a uma velocidade dy (dy também indica a direção
@@ -45,7 +45,7 @@
   (... (bruxa-y b) (bruxa-dy b))
   )
 ;;********************************************************************************************************************************
-(define-struct corvo (x dx y))
+(define-struct corvo (x dx y) #:transparent)
 ;;Corvo é (make-corvo Natural Inteiro)
 ;;interp. representa a corvo que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
@@ -61,7 +61,7 @@
 (define CORVO-NO-LIMITE (make-corvo LIMITE-DIR-COR -50 Y-PADRAO))
 
 ;;********************************************************************************************************************************
-(define-struct fada (x dx y))
+(define-struct fada (x dx y) #:transparent)
 ;;Fada é (make-fada Natural Inteiro)
 ;;interp. representa a fada que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
@@ -110,7 +110,7 @@
                    (fn-for-ldb (rest ldb)))])) ;RECURSÃO EM CAUDA
 
 ;;****************************************************************************************************************************************
-(define-struct arma (x dx y dy angulo))
+(define-struct arma (x dx y dy angulo) #:transparent)
 ;;Arma é (make-arma Natural Inteiro)
 ;;interp. representa a arma que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
@@ -127,7 +127,7 @@
   (... (arma-x a) (arma-dx a)) 
   )
 ;;************************************************************************************************************************************
-(define-struct tiro (x dx y dy))
+(define-struct tiro (x dx y dy) #:transparent)
 ;; Tiro é (make-tiro Natural Inteiro Natural)
 ;; interp. um tiro que apenas na horizontal
 (define TIRO-PADRAO (make-tiro 600 30 200 0))
@@ -138,7 +138,7 @@
   (... (tiro-x t) (tiro-dx t))
   )
 ;;**************************************************************************************************************************************
-(define-struct jogo (arma bruxas morcegos corvos fadas game-over? tsurgi tiros))
+(define-struct jogo (arma bruxas morcegos corvos fadas game-over? tsurgi tiros) #:transparent)
 ;; Jogo é (make-jogoArma ListaDeBruxa e ListaDemorcegos Boolean)
 ;; interp. representa um jogo que tem uma arma
 ;; e bruxa e morgegos.
