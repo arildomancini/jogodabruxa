@@ -1,8 +1,10 @@
 #lang racket
+(require rackunit)
+(require rackunit/text-ui)
 (require "constantes.rkt")
 (require "dados.rkt")
 (require "jogo.rkt")
-(provide (all-defined-out))
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
 
 ;; Constantes usadas nos testes
 ;#

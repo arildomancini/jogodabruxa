@@ -4,6 +4,9 @@
 (require 2htdp/universe)
 (require racket/list)
 (require 2htdp/image)
+(require rackunit)
+(require rackunit/text-ui)
+
 ;; Jean Carlos Neto Grr 2016 7741
 ;; Arildo Mancini Grr 2016 7512
 ;; Programa Jogo Mata Bruxas/Morcegos/Corvos
@@ -653,7 +656,7 @@
   (filter (lambda (t) (and (<= (tiro-y t) ALTURA-CENARIO) (>= (tiro-y t) 0)))  
           (map proximo-tiro ldt)))
 
-(check-equal? (proximos-tiros LDT1) (list (make-tiro 600 180 0)))
+(check-equal?(proximos-tiros LDT1)(list (make-tiro 600 180 0)))
 
 ;;*******************************************
 ;; proximo-jogo : Jogo -> Jogo

@@ -8,7 +8,7 @@
 (require 2htdp/universe)
 (require "jogo.rkt")   ;importa as funções definidas em "jogo.rkt"
 (require "dados.rkt") ;importa as funções definidas em "dados.rkt"
-(provide (all-defined-out))
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
 
 ;;*****************************************************************************************************************************
 ;; Jogo -> Jogo

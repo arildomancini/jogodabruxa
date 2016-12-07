@@ -5,7 +5,7 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 (require racket/list)
-(provide (all-defined-out))
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
 ;; Jean Carlos Neto Grr 2016 7741
 ;; Arildo Mancini Grr 2016 7512
 ;; Programa jogo mata a bruxa e seus bichos

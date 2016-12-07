@@ -5,7 +5,7 @@
 
 (require 2htdp/image)
 (require 2htdp/universe)
-(provide (all-defined-out))
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
 (require "constantes.rkt") ;importa as constantes definidas no arquivo "constantes.rkt"
 (require "dados.rkt") ;importa as definições de dados definidas no arquivo "dados.rkt"
 
