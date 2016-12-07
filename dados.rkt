@@ -5,15 +5,14 @@
 (require 2htdp/universe)
 (require "constantes.rkt") ;importa as constantes definidas no arquivo "constantes.rkt"
 (provide (all-defined-out))
-;;DEFINIÇÕES DE DADOS
-;;DEFINIÇÕES DE DADOS
 
-(define-struct morcego (x dx y) #:transparent)
+;;DEFINIÇÕES DE DADOS
+;;***********************************************************************************************************************************
+(define-struct morcego (x dx y)#:transparent)
 ;;Morcego é (make-morcego Natural Inteiro)
 ;;interp. representa a morcego que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
 ;;em que ela está apontando)
-
 ;exemplos:
 (define MOR-INICIAL (make-morcego (/ LARGURA-CENARIO 2) 10 Y-PADRAO))
 (define MOR-MEIO (make-morcego (/ LARGURA-CENARIO 2) 10 Y-PADRAO))
@@ -23,29 +22,28 @@
 (define MOR-CHEGANDO (make-morcego 50 -10 Y-PADRAO))
 (define MOR-ULTRAPASSOU (make-morcego (+ LIMITE-DIR-MOR 20) 50 Y-PADRAO))
 (define MOR-NO-LIMITE (make-morcego LIMITE-DIR-MOR -50 Y-PADRAO))
-;;***********************************************************************************************************************************
-                            
-(define-struct bruxa (x dx y dy) #:transparent)
+;;******************************************************************************************************************************                            
+(define-struct bruxa (x dx y dy)#:transparent)
 ;; Bruxa é (make-bruxa Natural Natural Inteiro)
-;; interp. representa o bruxa que está numa posição y
-;; da tela e anda a uma velocidade dy (dy também indica a direção
+;; interp. representa o bruxa que está numa posição x
+;; da tela e anda a uma velocidade dx (dx também indica a direção
 ;; em que ele está apontando)
 
 ;exemplos:
-(define BRUXA-INICIAL (make-bruxa X-B 0 LIMITE-DIREITO DY-B-DEFAULT))
-(define BRUXA-MEIO (make-bruxa X-B 0 (/ ALTURA-CENARIO 2) DY-B-DEFAULT))
-(define BRUXA-ANTES-VIRAR (make-bruxa X-B 0 (+ LIMITE-ESQUERDO  5) DY-B-DEFAULT))
-(define BRUXA-VIRADA (make-bruxa X-B 0 LIMITE-ESQUERDO  (- DY-B-DEFAULT)))
-(define BRUXA-MEIO-VOLTANDO (make-bruxa X-B 0 (/ LARGURA-CENARIO 2) DY-B-DEFAULT))
-(define BRUXA-ULTRAPASSOU (make-bruxa X-B 0 (+ LIMITE-DIREITO -5) (- DY-B-DEFAULT)))
-(define BRUXA-NO-LIMITE (make-bruxa X-B 0 LIMITE-DIREITO DY-B-DEFAULT))
+(define BRUXA-INICIAL (make-bruxa X 0 LIMITE-DIREITO DY-B-DEFAULT))
+(define BRUXA-MEIO (make-bruxa X 0 (/ ALTURA-CENARIO 2) DY-B-DEFAULT))
+(define BRUXA-ANTES-VIRAR (make-bruxa X 0 (+ LIMITE-ESQUERDO  5) DY-B-DEFAULT))
+(define BRUXA-VIRADA (make-bruxa X 0 LIMITE-ESQUERDO  (- DY-B-DEFAULT)))
+(define BRUXA-MEIO-VOLTANDO (make-bruxa X 0 (/ LARGURA-CENARIO 2) DY-B-DEFAULT))
+(define BRUXA-ULTRAPASSOU (make-bruxa X 0 (+ LIMITE-DIREITO -5) (- DY-B-DEFAULT)))
+(define BRUXA-NO-LIMITE (make-bruxa X 0 LIMITE-DIREITO DY-B-DEFAULT))
 
 #;
 (define (fn-para-bruxa b)
   (... (bruxa-y b) (bruxa-dy b))
   )
 ;;********************************************************************************************************************************
-(define-struct corvo (x dx y) #:transparent)
+(define-struct corvo (x dx y)#:transparent)
 ;;Corvo é (make-corvo Natural Inteiro)
 ;;interp. representa a corvo que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
@@ -61,7 +59,7 @@
 (define CORVO-NO-LIMITE (make-corvo LIMITE-DIR-COR -50 Y-PADRAO))
 
 ;;********************************************************************************************************************************
-(define-struct fada (x dx y) #:transparent)
+(define-struct fada (x dx y)#:transparent)
 ;;Fada é (make-fada Natural Inteiro)
 ;;interp. representa a fada que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
@@ -106,42 +104,44 @@
 #;
 (define (fn-for-ldb ldb)
   (cond [(empty? ldb) (...)]                    ;CASO BASE (CONDIÇÃO DE PARADA)
-        [else (... (first ldb)                  ;bruxa
+        [else (... (first ldb)                  ;ListaDEbruxa
                    (fn-for-ldb (rest ldb)))])) ;RECURSÃO EM CAUDA
 
 ;;****************************************************************************************************************************************
-(define-struct arma (x dx y dy angulo) #:transparent)
+(define-struct arma (x dx y)#:transparent)
 ;;Arma é (make-arma Natural Inteiro)
 ;;interp. representa a arma que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
 ;;em que ela está apontando)
 
 ;exemplos:
-(define ARMA-INICIAL (make-arma LIMITE-ESQUERDO 10 Y 0 20))
-(define ARMA-MEIO (make-arma (/ LARGURA-CENARIO 2) 10 Y 0 0))
-(define ARMA-ANTES-VIRAR (make-arma (+ LIMITE-DIREITO 5) 10 Y 0 0))
-(define ARMA-PARADA (make-arma (/ LARGURA-CENARIO 2) 0 LIMITE-BAIXO  0 0)) 
+(define ARMA-INICIAL (make-arma LIMITE-ESQUERDO 10 Y))
+(define ARMA-MEIO (make-arma (/ LARGURA-CENARIO 2) 10 Y ))
+(define ARMA-ANTES-VIRAR (make-arma (+ LIMITE-DIREITO 5) 10 Y ))
+(define ARMA-PARADA (make-arma (/ LARGURA-CENARIO 2) 0 LIMITE-BAIXO )) 
 
 #;
 (define (fn-para-arma a)
-  (... (arma-x a) (arma-dx a)) 
+  (... (arma-x a) (arma-dx a)
+       (arma-y a)) 
   )
 ;;************************************************************************************************************************************
-(define-struct tiro (x dx y dy) #:transparent)
+(define-struct tiro (x y dy)#:transparent)
 ;; Tiro é (make-tiro Natural Inteiro Natural)
 ;; interp. um tiro que apenas na horizontal
-(define TIRO-PADRAO (make-tiro 600 30 200 0))
+(define TIRO-PADRAO (make-tiro 600 200 0))
 (define LDT1 (list TIRO-PADRAO))
 
 #;
 (define (fn-para-tiro t)
-  (... (tiro-x t) (tiro-dx t))
+  (... (tiro-x t) (tiro-y t)
+       (tiro-dy t))
   )
 ;;**************************************************************************************************************************************
-(define-struct jogo (arma bruxas morcegos corvos fadas game-over? tsurgi tiros) #:transparent)
-;; Jogo é (make-jogoArma ListaDeBruxa e ListaDemorcegos Boolean)
+(define-struct jogo (arma bruxas morcegos corvos fadas game-over? tsurgi tiros tsurgif)#:transparent)
+;; Jogo é (make-jogo Arma ListaDeBruxa ListaDemorcegos ListaDeCorvos ListaDeFadas Boolean Numero+ ListaDetiros Numero+)
 ;; interp. representa um jogo que tem uma arma
-;; e bruxa e morgegos.
+;; e bruxa, morgegos, corvos, fadas, Boolean,tsurgi,tiros e tsurgifadas.
 
 (define JOGO-INICIAL (make-jogo ARMA-INICIAL
                                 (list BRUXA-INICIAL)
@@ -150,7 +150,8 @@
                                 LDF-J1
                                 #false
                                 1
-                                empty))
+                                empty
+                                1))
 (define JOGO-MEIO (make-jogo ARMA-ANTES-VIRAR
                                 (list BRUXA-MEIO)
                                 LDM-J1
@@ -158,33 +159,37 @@
                                 LDF-J1
                                 #false
                                 1
-                                empty))
+                                empty
+                                1))
 (define JOGO-ALVOS (make-jogo
-                   (make-arma (- (/ LARGURA-CENARIO 2) MEIO-H-B -5) 10 Y 0 0)
+                   (make-arma (- (/ LARGURA-CENARIO 2) MEIO-W-ARMA -5) 10 Y)
                    (list BRUXA-MEIO)
                    LDM-J1
                    LDC-J1
                    LDF-J1
                    #false
                    1
-                   empty))
+                   empty
+                   1))
 (define JOGO-ALVOS-MOVEL (make-jogo
-                   (make-arma (- (/ LARGURA-CENARIO 2) MEIO-H-B -5) 10 Y 0 0)
+                   (make-arma (- (/ LARGURA-CENARIO 2) MEIO-W-ARMA -5) 10 Y)
                    (list BRUXA-MEIO)
                    LDM-J1
                    LDC-J1
                    LDF-J1
                    #true
                    1
-                   empty))
+                   empty
+                   1))
 (define JOGO-ACABOU (make-jogo ARMA-MEIO
                                (list BRUXA-MEIO)
                                LDM-J1
                                LDC-J1
-                               LDF-J1
+                               LDF-J1 
                                #true
                                1
-                               empty))
+                               empty
+                               1))
 
 (define JOGO-INICIAL-N-ALVOS (make-jogo ARMA-INICIAL
                                 LDB-J1
@@ -193,7 +198,8 @@
                                 LDF-J1
                                 #false
                                 1
-                                empty))
+                                empty
+                                1))
 
 (define JOGO-INICIAL-SURGINDO (make-jogo ARMA-PARADA
                                 empty         
@@ -202,7 +208,8 @@
                                 empty
                                 #false 
                                 0
-                                empty))
+                                empty
+                                1))
 
 #;
 (define (fn-para-jogo j)
@@ -211,5 +218,7 @@
        (jogo-morcegos j)
        (jogo-corvos j)
        (jogo-fadas j)
-       (jogo-game-over? j)))
-
+       (jogo-game-over? j)
+       (jogo-tsurgi j)
+       (jogo-tiros j)
+       (jogo-tsurgif j)))

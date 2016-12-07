@@ -1,48 +1,42 @@
 #lang racket
-
-(require rackunit)
 (require "constantes.rkt")
 (require "dados.rkt")
 (require "jogo.rkt")
+(provide (all-defined-out))
 
 ;; Constantes usadas nos testes
 ;#
 (define (colisao-tiros-bruxas? ldt ldb)
- (test-suite
    "colisao-tiros-bruxas?"
-   ...))
+   )
 ;;Exemplo/Teste
 (check-equal? (colisao-tiros-bruxas? LDT1 LDB1) #false)
 ;;***********************************************************************************************************************************
 ;#
 (define (colisao-tiros-morcegos? ldt ldm)
- (test-suite
    "colisao-tiros-morcegos?"
-   ...))
+   )
 ;;Exemplo/Teste
 (check-equal? (colisao-tiros-morcegos? empty LDM-3) #false)
 ;;***********************************************************************************************************************************
 ;#
 (define (colisao-tiros-fadas? ldt ldf)
- (test-suite
    "colisao-tiros-fadas?"
-   ...))
+   )
 ;;Exemplo/Teste
 (check-equal? (colisao-tiros-fadas? empty LDF-3) #false)
 ;;**********************************************************************************************************************************
 ;#
 (define (proxima-arma a)
-  (test-suite
    "proxima-arma"
-   ...))
+   )
 ;;Exemplo/Teste
-(check-equal? (proxima-arma ARMA-INICIAL) (make-arma 109 10 350 0 20))
+(check-equal? (proxima-arma ARMA-INICIAL) (make-arma 109 10 350))
 ;;****************************************************************************************************************************   
 ;#
 (define (proximo-morcego m)
-  (test-suite
    "proximo-morcego"
-   ...))
+   )
 ; exemplos / testes
 ;casos em que ele anda pra direita sem chegar no limite 
 
@@ -68,15 +62,24 @@
 ;;*******************************************************************************************************************************
 ;#
 (define (proxima-bruxa b)
-  (test-suite
    "proxima-bruxa"
-   ...))
+   )
+;exemplos / testes
+;casos em que ela anda pra direita sem chegar no limite
+(check-equal? (proxima-bruxa BRUXA-MEIO)
+             (make-bruxa X 0 (/ ALTURA-CENARIO 2) DY-B-DEFAULT))
+; ;casos em que chega no limite direito e tem que virar
+(check-equal? (proxima-bruxa BRUXA-ULTRAPASSOU)
+              (make-bruxa X 0 (+ LIMITE-DIREITO -5) (- DY-B-DEFAULT)))
+;; caso em que ela anda pra esquerda sem chegar no limite 
+(check-equal? (proxima-bruxa BRUXA-ANTES-VIRAR)
+              (make-bruxa X 0 (+ LIMITE-ESQUERDO  5) DY-B-DEFAULT))
+
 ;;*******************************************************************************************************************************
 ;#
 (define (proximo-corvo c)
-  (test-suite
    "proximo-corvo"
-   ...))
+   )
 ; exemplos / testes
 ;casos em que ele anda pra direita sem chegar no limite
 (check-equal? (proximo-corvo (make-corvo 0 10 Y-PADRAO))
@@ -103,9 +106,8 @@
 ;;***********************************************************************************************************************************
 ;#
 (define (proxima-fada f)
-  (test-suite
    "proximo-fada"
-   ...))
+   )
 ; exemplos / testes
 ;casos em que ele anda pra direita sem chegar no limite
 (check-equal? (proxima-fada (make-fada 0 10 Y-PADRAO))
@@ -131,106 +133,84 @@
 ;;********************************************************************************************************************************
 ;#
 (define (proximo-tiro t)
-  (test-suite
    "proximo-tiro"
-   ...))
+   )
  ;; exemplos / testes
-(check-equal? (proximo-tiro (make-tiro 100 30 100 0)) (make-tiro 100 30 80 0)) 
-(check-equal? (proximo-tiro (make-tiro 10 30 80 0)) (make-tiro 10 30 60 0))
-(check-equal? (proximo-tiro (make-tiro 15 30 50 0)) (make-tiro 15 30 30 0))
-(check-equal? (proximo-tiro TIRO-PADRAO) (make-tiro 600 30 180 0))
+(check-equal? (proximo-tiro (make-tiro 100 100 0)) (make-tiro 100 80 0)) 
+(check-equal? (proximo-tiro (make-tiro 10 80 0)) (make-tiro 10 60 0))
+(check-equal? (proximo-tiro (make-tiro 15 50 0)) (make-tiro 15 30 0))
+(check-equal? (proximo-tiro TIRO-PADRAO) (make-tiro 600 180 0))
 
 ;;**************************************************************************************************************************
 ;#
 (define (proximo-jogo j)
-  (test-suite
    "proximo-jogo"
-   ...))
+   )
 ;;****************************************************************************************************************************
 ;#
 (define (proximos-morcegos ldm)
-  (test-suite
    "proximos-morcegos"
-   ...))
+   )
  ;; exemplos / testes
 (check-equal? (proximos-morcegos LDMM-3) (list (make-morcego 610 10 200) (make-morcego 610 10 200)))
 ;;******************************************************************************************************************************
 ;#
 (define (proximas-bruxas b)
-  (test-suite
    "proximas-bruxas"
-   ...))
+   )
  ;; exemplos / testes
 (check-equal? (proximas-bruxas LDB1) empty)
 ;;******************************************************************************************************************************
 (define (proximos-corvos ldc)
-  (test-suite
    "proximas-corvos"
-   ...))
+   )
 ; exemplos / testes
 ;;******************************************************************************************************************************
 (define (proximas-fadas ldf)
-  (test-suite
    "proximas-fadas"
-   ...))
+   )
 ; exemplos / testes
 
 ;;******************************************************************************************************************************
 ;#
 (define (proximos-tiros ldt)
-  (test-suite
    "proximos-tiros"
-   ...))
+   )
  ;; exemplos / testes
-(check-equal? (proximos-tiros LDT1) (list (make-tiro 600 30 180 0)))
+(check-equal? (proximos-tiros LDT1) (list (make-tiro 600 180 0)))
 ;;*****************************************************************************************************************************
 #;
 (define desenha-arma
-  (test-suite
    "desenha-arma"
-   ...))
+   )
    
 ;;****************************************************************************************************************************
 #;
 (define (trata-tecla j ke)
-  (test-suite
    "trata-tecla"
-   ...))
+   )
  ;;Exemplo/Teste
  (check-equal? (trata-tecla JOGO-ALVOS-MOVEL "\r")
               JOGO-INICIAL-SURGINDO)
  ;;********************************************************************************************************************************
 #;
-(define distancia x1 y1 x2 y2
-  (test-suite
-   "distancia x1 y1 x2 y2"
-   ...))
-(check-equal? (distancia 3 0 0 4) 5)
-;;*********************************************************************************************************************************
-#;
 (define trata-tecla-arma q ke
-  (test-suite
    "trata-tecla-arma q ke"
-   ...))
+   )
 ;exemplos
 ;;**************************************************************************************************************************   
 
 #;
 (define trata-mouse-tests
-  (test-suite
    "trata-mouse tests"
-   ...))
+   )
 
 #;
 (define terminou?-tests
-  (test-suite
    "terminou? tests"
-   ...))
+   )
 
 ;; Adicione os testes restantes
-
-
-
 ;; ---------------------------------------------------------------------
 
 ;; Função que executa um grupo de testes.
@@ -245,5 +225,4 @@
                  trata-tecla-tests
                  trata-mouse-tests
                  terminou?-tests)
-Contact GitHub API Training Shop Blog About
-© 2016 GitHub, Inc. Terms Privacy Security Status Help
+
