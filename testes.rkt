@@ -22,6 +22,13 @@
 (check-equal? (colisao-tiros-morcegos? empty LDM-3) #false)
 ;;***********************************************************************************************************************************
 ;#
+(define (colisao-tiros-corvos? ldt ldc)
+   "colisao-tiros-corvos?"
+   )
+;;Exemplo/Teste
+(check-equal? (colisao-tiros-corvos? empty LDC-3) #false)
+;;***********************************************************************************************************************************
+;#
 (define (colisao-tiros-fadas? ldt ldf)
    "colisao-tiros-fadas?"
    )
@@ -41,26 +48,27 @@
    )
 ; exemplos / testes
 ;casos em que ele anda pra direita sem chegar no limite 
-
-(check-equal? (proximo-morcego (make-morcego 0 10))
-              (make-morcego 10 10)) 
-(check-equal? (proximo-morcego ALVO-MOR-MEIO)
-              (make-morcego (+ (/ LARGURA-CENARIO 2) 10)
-                         10))
+(check-equal? (proximo-morcego (make-morcego 0 10 Y-PADRAO))
+              (make-morcego 10 10 Y-PADRAO)) 
+(check-equal? (proximo-morcego MOR-MEIO)
+              (make-morcego (+ (/ LARGURA-CENARIO 2) 10 ) 
+                         10 Y-PADRAO))
 ; casos em que chega no limite direito e tem que virar
-(check-equal? (proximo-morcego ALVO-MOR-ANTES-VIRAR)
-              ALVO-MOR-VIRADA)
-(check-equal? (proximo-morcego ALVO-MOR-ULTRAPASSOU)
-                            ALVO-MOR-NO-LIMITE)
+(check-equal? (proximo-morcego MOR-ANTES-VIRAR)
+              MOR-VIRADA )
+(check-equal? (proximo-morcego MOR-ULTRAPASSOU)
+                            MOR-NO-LIMITE)
 ; caso em que ele anda pra esquerda sem chegar no limite 
-(check-equal? (proximo-morcego ALVO-MOR-MEIO-VORTANO)
+(check-equal? (proximo-morcego MOR-MEIO-VOLTANDO)
                             (make-morcego (- (/ LARGURA-CENARIO 2) 10)
-                                       -10))
+                                       -10 Y-PADRAO))
+
 ; casos em que chega no limite esquerdo e tem que virar
-(check-equal? (proximo-morcego (make-morcego -10 -10))
-                            (make-morcego 0 10))
-(check-equal? (proximo-morcego (make-morcego -20 -50))
-                            (make-morcego 0 50))
+(check-equal? (proximo-morcego (make-morcego -10 -10 Y-PADRAO))
+                           (make-morcego 0 10 Y-PADRAO))
+(check-equal? (proximo-morcego (make-morcego -20 -50 Y-PADRAO))
+                            (make-morcego 0 50 Y-PADRAO))
+
 ;;*******************************************************************************************************************************
 ;#
 (define (proxima-bruxa b)
@@ -154,7 +162,7 @@
    "proximos-morcegos"
    )
  ;; exemplos / testes
-(check-equal? (proximos-morcegos LDMM-3) (list (make-morcego 610 10 200) (make-morcego 610 10 200)))
+(check-equal? (proximos-morcegos LDM-3) (list (make-morcego 610 10 200) (make-morcego 610 10 200)))
 ;;******************************************************************************************************************************
 ;#
 (define (proximas-bruxas b)
@@ -167,11 +175,13 @@
    "proximas-corvos"
    )
 ; exemplos / testes
+(check-equal? (proximos-corvos LDC-3) (list (make-corvo 610 10 200) (make-corvo 610 10 200)))
 ;;******************************************************************************************************************************
 (define (proximas-fadas ldf)
    "proximas-fadas"
    )
 ; exemplos / testes
+(check-equal? (proximas-fadas LDF-3) (list (make-fada 610 10 200) (make-fada 610 10 200)))
 
 ;;******************************************************************************************************************************
 ;#
@@ -196,10 +206,14 @@
               JOGO-INICIAL-SURGINDO)
  ;;********************************************************************************************************************************
 #;
-(define trata-tecla-arma q ke
-   "trata-tecla-arma q ke"
+(define trata-tecla-arma a ke
+   "trata-tecla-arma a ke"
    )
 ;exemplos
+(check-equal? (trata-tecla-arma ARMA-MEIO "right")
+              (make-arma (arma-x ARMA-MEIO) D-ARMA-DEFAULT (arma-y ARMA-MEIO))) 
+(check-equal? (trata-tecla-arma ARMA-INICIAL "0") ARMA-INICIAL)
+;;*******************************************  
 ;;**************************************************************************************************************************   
 
 #;

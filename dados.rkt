@@ -7,9 +7,9 @@
 (provide (all-defined-out)) ;permite que outros arquivos importem deste
 
 ;;DEFINIÇÕES DE DADOS
-;;***********************************************************************************************************************************
-(define-struct morcego (x dx y)#:transparent)
-;;Morcego é (make-morcego Natural Inteiro)
+
+(define-struct morcego (x dx y))
+;;Morcego é (make-morcego Numero+ Numero Numero+)
 ;;interp. representa a morcego que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
 ;;em que ela está apontando)
@@ -22,9 +22,9 @@
 (define MOR-CHEGANDO (make-morcego 50 -10 Y-PADRAO))
 (define MOR-ULTRAPASSOU (make-morcego (+ LIMITE-DIR-MOR 20) 50 Y-PADRAO))
 (define MOR-NO-LIMITE (make-morcego LIMITE-DIR-MOR -50 Y-PADRAO))
-;;******************************************************************************************************************************                            
-(define-struct bruxa (x dx y dy)#:transparent)
-;; Bruxa é (make-bruxa Natural Natural Inteiro)
+;;*******************************************                           
+(define-struct bruxa (x dx y dy))
+;; Bruxa é (make-bruxa Numero+ Numero Numero+ Numero)
 ;; interp. representa o bruxa que está numa posição x
 ;; da tela e anda a uma velocidade dx (dx também indica a direção
 ;; em que ele está apontando)
@@ -42,9 +42,9 @@
 (define (fn-para-bruxa b)
   (... (bruxa-y b) (bruxa-dy b))
   )
-;;********************************************************************************************************************************
-(define-struct corvo (x dx y)#:transparent)
-;;Corvo é (make-corvo Natural Inteiro)
+;;*******************************************
+(define-struct corvo (x dx y))
+;;Corvo é (make-corvo Numero+ Numero Numero+)
 ;;interp. representa a corvo que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
 ;;em que ela está apontando)
@@ -58,9 +58,9 @@
 (define CORVO-ULTRAPASSOU (make-corvo (+ LIMITE-DIR-COR 20) 50 Y-PADRAO))
 (define CORVO-NO-LIMITE (make-corvo LIMITE-DIR-COR -50 Y-PADRAO))
 
-;;********************************************************************************************************************************
-(define-struct fada (x dx y)#:transparent)
-;;Fada é (make-fada Natural Inteiro)
+;;*******************************************
+(define-struct fada (x dx y))
+;;Fada é (make-fada Numero+ Numero Numero+)
 ;;interp. representa a fada que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
 ;;em que ela está apontando)
@@ -74,7 +74,7 @@
 (define FADA-ULTRAPASSOU (make-fada (+ LIMITE-DIR-FAD 20) 50 Y-PADRAO))
 (define FADA-NO-LIMITE (make-fada LIMITE-DIR-FAD -50 Y-PADRAO))
 
-;;********************************************************************************************************************************
+;;*******************************************
 ; ListaDebruxa, ListaDemorcegos, ListaDecorvo e ListaDefada é um desses:
 ;; - empty
 ;; - (cons bruxas, morcegos, corvos e fadas  ListaDebruxa/morcegos/corvos e fadas)
@@ -107,9 +107,9 @@
         [else (... (first ldb)                  ;ListaDEbruxa
                    (fn-for-ldb (rest ldb)))])) ;RECURSÃO EM CAUDA
 
-;;****************************************************************************************************************************************
-(define-struct arma (x dx y)#:transparent)
-;;Arma é (make-arma Natural Inteiro)
+;;*************************************************
+(define-struct arma (x dx y))
+;;Arma é (make-arma Numero+ Numero Numero+)
 ;;interp. representa a arma que está numa posição x
 ;;da tela e anda a uma velocidade dx (dx também indica a direção
 ;;em que ela está apontando)
@@ -125,9 +125,9 @@
   (... (arma-x a) (arma-dx a)
        (arma-y a)) 
   )
-;;************************************************************************************************************************************
-(define-struct tiro (x y dy)#:transparent)
-;; Tiro é (make-tiro Natural Inteiro Natural)
+;;*********************************************
+(define-struct tiro (x y dy))
+;; Tiro é (make-tiro Numero+ Numero+ Numero-)
 ;; interp. um tiro que apenas na horizontal
 (define TIRO-PADRAO (make-tiro 600 200 0))
 (define LDT1 (list TIRO-PADRAO))
@@ -137,8 +137,8 @@
   (... (tiro-x t) (tiro-y t)
        (tiro-dy t))
   )
-;;**************************************************************************************************************************************
-(define-struct jogo (arma bruxas morcegos corvos fadas game-over? tsurgi tiros tsurgif)#:transparent)
+;;***********************************************
+(define-struct jogo (arma bruxas morcegos corvos fadas game-over? tsurgi tiros tsurgif))
 ;; Jogo é (make-jogo Arma ListaDeBruxa ListaDemorcegos ListaDeCorvos ListaDeFadas Boolean Numero+ ListaDetiros Numero+)
 ;; interp. representa um jogo que tem uma arma
 ;; e bruxa, morgegos, corvos, fadas, Boolean,tsurgi,tiros e tsurgifadas.
@@ -222,3 +222,5 @@
        (jogo-tsurgi j)
        (jogo-tiros j)
        (jogo-tsurgif j)))
+
+;; =================================================================================================================================================
